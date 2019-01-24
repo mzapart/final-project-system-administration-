@@ -1,0 +1,12 @@
+[Unit]
+Description=My carrental service
+After=network-online.target
+
+[Service]
+Type=simple
+User={{user}}
+ExecStart=/usr/bin/java -jar app/app.jar
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,31 @@
+  - name: install the influxdb
+    yum:
+      name: "{{ influxdb_url }}"
+      state: present
+  - name: making sure that infuxdb is working
+    service:
+      name: influxdb
+      state: restarted      
+  - name: install grafana
+    yum:
+      name: "{{ grafana_url }}"
+      state: present
+  - name: "put grafana config"
+    copy:
+      src: templates/grafana.ini
+      dest: "/etc/grafana/grafana.ini"    
+  - name: making sure that grafana is working
+    service:
+      name: grafana-server
+      state: restarted
+  - name: Create influxdb datasource
+    grafana_datasource:
+      name: "datasource-influxdb"
+      grafana_url: "http://localhost:8080"
+      grafana_user: "admin"
+      grafana_password: "admin"
+      org_id: "1"
+      ds_type: "influxdb"
+      url: "http://localhost:8086"
+      database: "metrics"
+    

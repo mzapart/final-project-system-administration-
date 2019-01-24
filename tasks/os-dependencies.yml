@@ -1,0 +1,27 @@
+---
+
+- name: Ensure Java is installed.
+  yum:
+    name: "{{ java }}"
+    state: present
+- name: "Making root for app"
+  file:
+    path: /app
+    state: directory
+- name: copy jar
+  copy:
+    src:  templates/car_rental.jar
+    dest: /app/app.jar
+- name: copy systemd conf
+  template:
+    src: templates/systemd
+    dest: /etc/systemd/system/aplikacja.service
+- name: "Create new user for app"
+  user:
+    name: "{{user}}"
+- name: "Start app service"
+  systemd:
+    name: aplikacja.service
+    daemon_reload: yes
+    state: restarted
+    
